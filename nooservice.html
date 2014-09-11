@@ -1,0 +1,197 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>NOO - Your search for help!</title>
+<link type="text/css" rel="stylesheet" href="jquery-ui.css" />
+<link type="text/css" rel="stylesheet" href="estilo.css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+
+<script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNr2lxcg5ooVCIDZTuTeTgQmyxMU-9eF4">
+</script>
+
+    <script>
+        $(function() {
+            var availableTags = [
+                "Agudos",
+                "Americana",
+                "Bauru",
+                "Belo Horizonte",
+                "Brasilia",
+                "Campinas",
+                "Florianópolis",
+                "Fortaleza",
+                "Itú",
+                "Manaus",
+                "Mauá",
+                "Ourinhos",
+                "Pindamonhangaba",
+                "Piratinga",
+                "Porto Alegre",
+                "Rio de Janeiro",
+                "Salvador",
+                "Santo André",
+                "São Bernardo",
+                "São Paulo",
+                "Varginha"
+            ];
+            $( "#txtCidade" ).autocomplete({
+                source: availableTags
+            });
+        });
+    </script>
+
+
+<script type="text/javascript">
+	function initialize(lat, lng) {
+		console.log(lat);
+		console.log(lng);
+		var mapOptions = {
+
+			//"location":{"lat":"-22.29147","lng":"-48.54964"}
+			center: new google.maps.LatLng(lat, lng),
+			zoom: 16
+		};
+		var map = new google.maps.Map(document.getElementById("map-canvas"),
+				mapOptions);
+
+		var marker = new google.maps.Marker({
+			position: mapOptions.center,
+			map: map,
+			title: 'Teste'
+		});
+	}
+	google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+<script>
+
+	function authenticate() {
+		var appID = 'nooservice';
+		var secret = 've3URy8S30RiXYQ5k7k8czH6HC9~';
+		var path = 'https://api.apontador.com.br/v2/oauth/token?';
+		var queryParams = [ 'client_id=' + appID, 'client_secret=' + secret, 'grant_type=client_credentials',
+				'redirect_uri=C:/ProjetoNOO/browse.html', 'scope=read', 'response_type=token' ];
+		var query = queryParams.join('&');
+		var url = path + query;
+		window.location.href = url;
+	}
+
+ 	function display(textoPesquisa, cidade) {
+
+		//authenticate();
+
+		var accessToken = "d7a8b824-6c1c-4553-b565-38b6e5d77133";//'b6c2b2ef-ef84-4f9c-8c1b-d4f43dbc8886';
+		console.log('access-token:' + accessToken);
+		var headers = {
+			'Authorization' : 'Bearer ' + accessToken,
+			'Accept' : 'application/json'
+		};
+		$.ajaxSetup({
+			'headers' : headers,
+			dataType : 'text'
+		});
+		$.get('https://api.apontador.com.br/v2/places/?q='+ textoPesquisa +'&fq=address.city:"'+ cidade +'"&wt=json', function(data) {
+			console.log('data:' + data);
+
+			var lista = $.parseJSON(data);
+
+            var resultado = "";
+			$.each(lista.results.places, function(i, item) {
+				resultado += "<div id = 'item" + i + "' class = 'item-resultado-pesquisa'>";
+				resultado += "<b>" + item.name + "</b></br>";
+				resultado += item.address.street + ", " + item.address.number + "</br>";
+				resultado += item.address.zipcode + "</br>";
+				resultado += item.address.city + "/" + item.address.state + "</br>";
+				resultado += '<p align="right"><input type="button" onClick="initialize('+item.location.lat +',' +item.location.lng+')" name="btnVerMapa" id="btnVerMapa' + i + '" value="Ver mapa"></p>';
+				resultado += "</div>";
+
+  			});
+  			$("#resultado-busca").append(resultado);
+
+		});
+	}
+//	$(function() {
+//		if (window.location.hash.length == 0) {
+//			authenticate();
+//		} else {
+//			display();
+//		}
+//	})
+
+	function submitForm() {
+		var strPesquisa = $("#cboPesquisa").val();
+		var strCidade = $("#txtCidade").val();
+		if (strCidade == "") {
+			alert("Digite uma cidade!");
+			return false;
+		}
+		display(strPesquisa, strCidade);
+    }
+
+    function clearBox(elementIDTeste)
+    {
+        document.getElementById(elementIDTeste).innerHTML = "";
+    }
+
+
+</script>
+
+
+
+</head>
+<body>
+
+<div id="geral">
+
+	<div id="topo">
+    	<h1>NOO</h1>
+    	<h2>Your search for help!</h2>
+    </div>
+
+	<div id="conteudo">
+    	<div id="busca">
+        <h4>Faça sua pesquisa</h4>
+        <br>
+        <form name="formPesquisa" id="formPesquisa" method="post" action="">
+            <label>Pesquisar por:</label>
+        	<select name="cboPesquisa" id="cboPesquisa">
+        	  <option value="Centro de Saude">Centro de Sa&uacute;de</option>
+        	  <option value="Escolas">Escolas</option>
+        	  <option value="Forum">F&oacute;rum</option>
+        	  <option value="Farmacia">Farm&aacute;cia</option>
+        	  <option value="Hospital">Hospital</option>
+        	  <option value="Policia Civil">Pol&iacute;cia Civil</option>
+        	  <option value="Policia Militar">Pol&iacute;cia Militar</option>
+        	  <option value="Rodoviaria">Rodovi&aacute;ria</option>
+       	  	</select>
+            <label>Cidade:</label>
+            <input name="txtCidade" id="txtCidade" type="text" size="20" maxlength="50" required>
+        	<input type="button" name="btnPesquisar" id="btnPesquisar" value="Search" onClick="submitForm()">
+            <input type="button" name="btnLimpar" id="btnLimpar" value="Limpar" onClick="clearBox('resultado-busca')">
+      	</form>
+      	</div>
+
+
+        <div id="resultado-busca">
+
+
+        	<br clear="all" />
+
+        </div>
+
+        <div id="map-canvas">
+        </div>
+
+        <br clear="all" />
+
+	</div>
+
+    <div id="rodape"></div>
+
+</div>
+
+</body>
+</html>

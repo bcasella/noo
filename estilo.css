@@ -1,0 +1,106 @@
+/* CSS Document */
+
+*{ margin:0; padding:0; }
+
+body {
+	background-color:#EFEFEF;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color:#333;
+}
+#map-canvas { height: 100% }
+
+#geral {
+	margin:0 auto;
+	width:960px;
+}
+
+#topo {
+	width:960px;
+	background-color:#FFFFFF;
+	border:1px solid #CCC;
+	min-height:100px;
+}
+
+#conteudo {
+	margin-top:5px;
+	width:956px;
+	min-height:470px;
+	background-color:#FFF;
+	border:1px solid #CCC;
+	padding:2px;
+}
+
+#busca {
+	width:auto;
+	margin:5px;
+	background-color:#DFEFFF;	
+	padding:10px;
+}
+
+#resultado-busca {
+	width:320px;
+	min-height:100px;
+	float:left;
+	margin:5px;
+}
+
+.item-resultado-pesquisa {
+	margin-bottom:5px;
+	width:300px;
+	min-height:80px;
+	padding:5px;
+	float:left;
+	border-bottom:solid 1px #C8C8C8;
+}
+
+#map-canvas {
+	width:600px;
+	height:400px;
+	float:right;
+	margin:5px;
+}
+
+#rodape {
+	margin-top:5px;
+	width:960px;
+	background-color:FFF;
+	min-height:50px;
+	border:1px solid #CCC;
+}
+
+input {
+	border:1px solid #999;
+	height:20px;
+	min-width:60px;
+}
+textarea {
+	border:1px solid #999;
+}
+input[type="submit"] {
+	border:1px solid #999;
+	background:#CCC;
+	color:#333;
+	height:24px;
+	cursor:pointer;
+	padding-left:10px;
+	padding-right:10px;
+}
+.erro {
+	background-color: #FFFFCC;
+	border: 1px solid #666666;
+	font-size: 11px;
+	font-weight: bold;
+	color: #FF0000;
+	padding: 5px;
+	margin:10px;
+}
+.ok {
+	background-color: #0099CC;
+	border: 1px solid #666666;
+	font-size: 11px;
+	font-weight: bold;
+	color: #FFFFFF;
+	padding: 5px;
+	margin:10px;
+}
